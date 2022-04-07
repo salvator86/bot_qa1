@@ -1,0 +1,14 @@
+{
+  "name": "epam-questions-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index"
+  },
+  "author": "Hryhorii kadaner",
+  "license": "ISC",
+  "dependencies": {
+    "node-telegram-bot-api": "^0.56.0"
+  }
+}
