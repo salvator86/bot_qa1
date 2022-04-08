@@ -39,21 +39,7 @@ let finish_keyboard = {
     parse_mode: "HTML"
 };
 
-const users_list = [{
-    uid: 8521348654,
-    tags_array: [],
-    question_msg: "",
-    polling_process: false,
-    writing_message: false,
-    adding_hashtags: false
-}, {
-    uid: 2983654986,
-    tags_array: [],
-    question_msg: "",
-    polling_process: false,
-    writing_message: false,
-    adding_hashtags: false
-}];
+const users_list = [];
 
 bot.on("message", function (msg) {
     let chatID = msg.chat.id;
@@ -84,7 +70,7 @@ bot.on("message", function (msg) {
     }
     
     if (users_list.filter(user => String(user.uid) == chatID)[0].polling_process) {
-        if (users_list.filter(user => String(user.uid) == chatID)[0].writing_message == true && users_list.filter(user => String(user.uid) == chatID)[0].adding_hashtags == false) {
+        if (users_list.filter(user => String(user.uid) == chatID)[0].writing_message == true && users_list.filter(user => String(user.uid) == chatID)[0].adding_hashtags == false && msg.text != "/start") {
             users_list.filter(user => String(user.uid) == chatID)[0].question_msg = `<b>📍Питання</b>\n- - - - - - - - - - - - - - -\n${msg.text}\n- - - - - - - - - - - - - - -\n`;
             bot.sendMessage(chatID, "Так вигладає ваше питання:\n\n" + users_list.filter(user => String(user.uid) == chatID)[0].question_msg, {
                 parse_mode: "HTML"
