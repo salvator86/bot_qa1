@@ -78,10 +78,9 @@ bot.on("message", function (msg) {
             return;
         }
         if (msg.text == "/stop") {
-            adding_hashtags = false;
-            question_msg = question_msg + tags_array.join(" ");
+            adding_hashtags = false;            
             setTimeout(() => {
-                bot.sendMessage(chatID, "Так вигладає ваше питання:\n\n" + question_msg, {
+                bot.sendMessage(chatID, "Так вигладає ваше питання:\n\n" + question_msg + tags_array.join(" "), {
                     "parse_mode": "HTML",
                     disable_web_page_preview: true
                 });
@@ -105,6 +104,7 @@ bot.on("message", function (msg) {
             return;
         }
         if (msg.text == "✈ Надіслати") {
+            question_msg = question_msg + tags_array.join(" ");
             bot.sendMessage(chatID, "✈ <b>Ваше питання надіслано!</b>", greeting_keyboard);
             setTimeout(() => {
                 bot.sendMessage("-1001589326978", question_msg, {
