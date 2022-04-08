@@ -58,7 +58,7 @@ const users_list = [{
 bot.on("message", function (msg) {
     let chatID = msg.chat.id;
     
-    if (users_list.filter(user => user.uid == chatID).length > 0) {
+    if (users_list.filter(user => user.uid == chatID).length == 0) {
         users_list.push({
             uid: chatID,
             tags_array: [],
