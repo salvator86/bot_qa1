@@ -78,37 +78,32 @@ bot.on("message", function (msg) {
             }
         });
         
-        users_list.filter(user => String(user.uid) == chatID).polling_process = true;
-        users_list.filter(user => String(user.uid) == chatID).writing_message = true;
-        setTimeout(() => {
-            bot.sendMessage(chatID, JSON.stringify(users_list.filter(user => String(user.uid) == chatID)));
-            bot.sendMessage(chatID, "polling_process: " + users_list.filter(user => String(user.uid) == chatID).polling_process);
-            bot.sendMessage(chatID, "writing_message: " + users_list.filter(user => String(user.uid) == chatID).writing_message);
-        }, 300);
+        users_list.filter(user => String(user.uid) == chatID)[0].polling_process = true;
+        users_list.filter(user => String(user.uid) == chatID)[0].writing_message = true;
         return;
     }
     
-    if (users_list.filter(user => String(user.uid) == chatID).polling_process) {
-        if (users_list.filter(user => String(user.uid) == chatID).writing_message == true && users_list.filter(user => String(user.uid) == chatID).adding_hashtags == false) {
-            users_list.filter(user => String(user.uid) == chatID).question_msg = `<b>📍Питання</b>\n- - - - - - - - - - - - - - -\n${msg.text}\n- - - - - - - - - - - - - - -\n`;
-            bot.sendMessage(chatID, "Так вигладає ваше питання:\n\n" + users_list.filter(user => String(user.uid) == chatID).question_msg, {
+    if (users_list.filter(user => String(user.uid) == chatID)[0].polling_process) {
+        if (users_list.filter(user => String(user.uid) == chatID)[0].writing_message == true && users_list.filter(user => String(user.uid) == chatID)[0].adding_hashtags == false) {
+            users_list.filter(user => String(user.uid) == chatID)[0].question_msg = `<b>📍Питання</b>\n- - - - - - - - - - - - - - -\n${msg.text}\n- - - - - - - - - - - - - - -\n`;
+            bot.sendMessage(chatID, "Так вигладає ваше питання:\n\n" + users_list.filter(user => String(user.uid) == chatID)[0].question_msg, {
                 parse_mode: "HTML"
             });
             setTimeout(() => {
                 bot.sendMessage(chatID, "<b>#⃣ Додайте хештеги до питання</b>\n\n1) Щоб зупинити додавання хештегів, напишіть <code>/stop</code> у чат.\n2)Щоб додати свій хештег, напишіть його таким чином <code>#назва</code>", hashtags_keyboard);
-                users_list.filter(user => String(user.uid) == chatID).writing_message = false;
-                users_list.filter(user => String(user.uid) == chatID).adding_hashtags = true;
+                users_list.filter(user => String(user.uid) == chatID)[0].writing_message = false;
+                users_list.filter(user => String(user.uid) == chatID)[0].adding_hashtags = true;
             }, 500);
             return;
         }
-        if (users_list.filter(user => String(user.uid) == chatID).adding_hashtags && msg.text.indexOf("#") != -1) {
-            users_list.filter(user => String(user.uid) == chatID).tags_array.push(msg.text);
+        if (users_list.filter(user => String(user.uid) == chatID)[0].adding_hashtags && msg.text.indexOf("#") != -1) {
+            users_list.filter(user => String(user.uid) == chatID)[0].tags_array.push(msg.text);
             return;
         }
         if (msg.text == "/stop") {
-            users_list.filter(user => String(user.uid) == chatID).adding_hashtags = false;            
+            users_list.filter(user => String(user.uid) == chatID)[0].adding_hashtags = false;            
             setTimeout(() => {
-                bot.sendMessage(chatID, "Так вигладає ваше питання:\n\n" + users_list.filter(user => String(user.uid) == chatID).question_msg + users_list.filter(user => String(user.uid) == chatID).tags_array.join(" "), {
+                bot.sendMessage(chatID, "Так вигладає ваше питання:\n\n" + users_list.filter(user => String(user.uid) == chatID)[0].question_msg + users_list.filter(user => String(user.uid) == chatID)[0].tags_array.join(" "), {
                     "parse_mode": "HTML",
                     disable_web_page_preview: true
                 });
@@ -119,32 +114,32 @@ bot.on("message", function (msg) {
             return;
         }
         if (msg.text == "❌ Скасувати питання") {
-            users_list.filter(user => String(user.uid) == chatID).adding_hashtags = false;
-            users_list.filter(user => String(user.uid) == chatID).question_msg = "";
-            users_list.filter(user => String(user.uid) == chatID).tags_array = [];
-            users_list.filter(user => String(user.uid) == chatID).polling_process = false;
+            users_list.filter(user => String(user.uid) == chatID)[0].adding_hashtags = false;
+            users_list.filter(user => String(user.uid) == chatID)[0].question_msg = "";
+            users_list.filter(user => String(user.uid) == chatID)[0].tags_array = [];
+            users_list.filter(user => String(user.uid) == chatID)[0].polling_process = false;
             bot.sendMessage(chatID, "<b>❌ Питання анульовано ❌</b>\n\nДля того, щоб поставити нове запитання, оберіть пункт в меню:\n[<b>💬 Поставити запитання</b>]", greeting_keyboard);
             return;
         }
         if (msg.text == "#⃣ Додати хештеги") {
             bot.sendMessage(chatID, "<b>#⃣ Додайте хештеги до питання</b>\n\n1) Щоб зупинити додавання хештегів, напишіть <code>/stop</code> у чат.\n2)Щоб додати свій хештег, напишіть його таким чином <code>#назва</code>", hashtags_keyboard);
-            users_list.filter(user => String(user.uid) == chatID).adding_hashtags = true;
+            users_list.filter(user => String(user.uid) == chatID)[0].adding_hashtags = true;
             return;
         }
         if (msg.text == "✈ Надіслати") {
-            users_list.filter(user => String(user.uid) == chatID).question_msg = users_list.filter(user => String(user.uid) == chatID).question_msg + users_list.filter(user => String(user.uid) == chatID).tags_array.join(" ");
+            users_list.filter(user => String(user.uid) == chatID)[0].question_msg = users_list.filter(user => String(user.uid) == chatID)[0].question_msg + users_list.filter(user => String(user.uid) == chatID)[0].tags_array.join(" ");
             bot.sendMessage(chatID, "✈ <b>Ваше питання надіслано!</b>", greeting_keyboard);
             setTimeout(() => {
-                bot.sendMessage("-1001589326978", users_list.filter(user => String(user.uid) == chatID).question_msg, {
+                bot.sendMessage("-1001589326978", users_list.filter(user => String(user.uid) == chatID)[0].question_msg, {
                     "parse_mode": "HTML",
                     disable_web_page_preview: true
                 });
             }, 500);
             setTimeout(() => {
-                users_list.filter(user => String(user.uid) == chatID).adding_hashtags = false;
-                users_list.filter(user => String(user.uid) == chatID).question_msg = "";
-                users_list.filter(user => String(user.uid) == chatID).tags_array = [];
-                users_list.filter(user => String(user.uid) == chatID).polling_process = false;
+                users_list.filter(user => String(user.uid) == chatID)[0].adding_hashtags = false;
+                users_list.filter(user => String(user.uid) == chatID)[0].question_msg = "";
+                users_list.filter(user => String(user.uid) == chatID)[0].tags_array = [];
+                users_list.filter(user => String(user.uid) == chatID)[0].polling_process = false;
             }, 1000);
             return;
         }
