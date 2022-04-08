@@ -39,14 +39,35 @@ let finish_keyboard = {
     parse_mode: "HTML"
 };
 
-let polling_process = false;
-let writing_message = false;
-let adding_hashtags = false;
-let tags_array = [];
-let question_msg = "";
+const users_list = [{
+    uid: 8521348654,
+    tags_array: [],
+    question_msg: "",
+    polling_process: false,
+    writing_message: false,
+    adding_hashtags: false
+}, {
+    uid: 2983654986,
+    tags_array: [],
+    question_msg: "",
+    polling_process: false,
+    writing_message: false,
+    adding_hashtags: false
+}];
 
 bot.on("message", function (msg) {
     let chatID = msg.chat.id;
+    
+    if (users_list.filter(user => user.uid == chatID).length > 0) {
+        users_list.push({
+            uid: chatID,
+            tags_array: [],
+            question_msg: "",
+            polling_process: false,
+            writing_message: false,
+            adding_hashtags: false
+        });
+    }
     if (msg.text == "/start") {
         bot.sendMessage(chatID, '<b>Вас вітає <i>EPAM [QA] BOT</i> 😊!</b>\n\nДля того, щоб поставити запитання, оберіть пункт в меню:\n[<b>💬 Поставити запитання</b>]', greeting_keyboard);
     }
@@ -56,31 +77,32 @@ bot.on("message", function (msg) {
                 remove_keyboard: true
             }
         });
-        polling_process = true;
-        writing_message = true;
+        
+        users_list.filter(user => user.uid == chatID).polling_process = true;
+        users_list.filter(user => user.uid == chatID).writing_message = true;
         return;
     }
-    if (polling_process) {
-        if (writing_message == true && adding_hashtags == false) {
-            question_msg = `<b>📍Питання</b>\n- - - - - - - - - - - - - - -\n${msg.text}\n- - - - - - - - - - - - - - -\n`;
-            bot.sendMessage(chatID, "Так вигладає ваше питання:\n\n" + question_msg, {
+    if (users_list.filter(user => user.uid == chatID).polling_process) {
+        if (users_list.filter(user => user.uid == chatID).writing_message == true && users_list.filter(user => user.uid == chatID).adding_hashtags == false) {
+            users_list.filter(user => user.uid == chatID).question_msg = `<b>📍Питання</b>\n- - - - - - - - - - - - - - -\n${msg.text}\n- - - - - - - - - - - - - - -\n`;
+            bot.sendMessage(chatID, "Так вигладає ваше питання:\n\n" + users_list.filter(user => user.uid == chatID).question_msg, {
                 parse_mode: "HTML"
             });
             setTimeout(() => {
                 bot.sendMessage(chatID, "<b>#⃣ Додайте хештеги до питання</b>\n\n1) Щоб зупинити додавання хештегів, напишіть <code>/stop</code> у чат.\n2)Щоб додати свій хештег, напишіть його таким чином <code>#назва</code>", hashtags_keyboard);
-                writing_message = false;
-                adding_hashtags = true;
+                users_list.filter(user => user.uid == chatID).writing_message = false;
+                users_list.filter(user => user.uid == chatID).adding_hashtags = true;
             }, 500);
             return;
         }
-        if (adding_hashtags && msg.text.indexOf("#") != -1) {
-            tags_array.push(msg.text);
+        if (users_list.filter(user => user.uid == chatID).adding_hashtags && msg.text.indexOf("#") != -1) {
+            users_list.filter(user => user.uid == chatID).tags_array.push(msg.text);
             return;
         }
         if (msg.text == "/stop") {
-            adding_hashtags = false;            
+            users_list.filter(user => user.uid == chatID).adding_hashtags = false;            
             setTimeout(() => {
-                bot.sendMessage(chatID, "Так вигладає ваше питання:\n\n" + question_msg + tags_array.join(" "), {
+                bot.sendMessage(chatID, "Так вигладає ваше питання:\n\n" + users_list.filter(user => user.uid == chatID).question_msg + users_list.filter(user => user.uid == chatID).tags_array.join(" "), {
                     "parse_mode": "HTML",
                     disable_web_page_preview: true
                 });
@@ -91,32 +113,32 @@ bot.on("message", function (msg) {
             return;
         }
         if (msg.text == "❌ Скасувати питання") {
-            adding_hashtags = false;
-            question_msg = "";
-            tags_array = [];
-            polling_process = false;
+            users_list.filter(user => user.uid == chatID).adding_hashtags = false;
+            users_list.filter(user => user.uid == chatID).question_msg = "";
+            users_list.filter(user => user.uid == chatID).tags_array = [];
+            users_list.filter(user => user.uid == chatID).polling_process = false;
             bot.sendMessage(chatID, "<b>❌ Питання анульовано ❌</b>\n\nДля того, щоб поставити нове запитання, оберіть пункт в меню:\n[<b>💬 Поставити запитання</b>]", greeting_keyboard);
             return;
         }
         if (msg.text == "#⃣ Додати хештеги") {
             bot.sendMessage(chatID, "<b>#⃣ Додайте хештеги до питання</b>\n\n1) Щоб зупинити додавання хештегів, напишіть <code>/stop</code> у чат.\n2)Щоб додати свій хештег, напишіть його таким чином <code>#назва</code>", hashtags_keyboard);
-            adding_hashtags = true;
+            users_list.filter(user => user.uid == chatID).adding_hashtags = true;
             return;
         }
         if (msg.text == "✈ Надіслати") {
-            question_msg = question_msg + tags_array.join(" ");
+            users_list.filter(user => user.uid == chatID).question_msg = users_list.filter(user => user.uid == chatID).question_msg + users_list.filter(user => user.uid == chatID).tags_array.join(" ");
             bot.sendMessage(chatID, "✈ <b>Ваше питання надіслано!</b>", greeting_keyboard);
             setTimeout(() => {
-                bot.sendMessage("-1001589326978", question_msg, {
+                bot.sendMessage("-1001589326978", users_list.filter(user => user.uid == chatID).question_msg, {
                     "parse_mode": "HTML",
                     disable_web_page_preview: true
                 });
             }, 500);
             setTimeout(() => {
-                adding_hashtags = false;
-                question_msg = "";
-                tags_array = [];
-                polling_process = false;
+                users_list.filter(user => user.uid == chatID).adding_hashtags = false;
+                users_list.filter(user => user.uid == chatID).question_msg = "";
+                users_list.filter(user => user.uid == chatID).tags_array = [];
+                users_list.filter(user => user.uid == chatID).polling_process = false;
             }, 1000);
             return;
         }
