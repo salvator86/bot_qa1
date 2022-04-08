@@ -80,8 +80,11 @@ bot.on("message", function (msg) {
         
         users_list.filter(user => user.uid == chatID).polling_process = true;
         users_list.filter(user => user.uid == chatID).writing_message = true;
+        bot.sendMessage(chatID, "polling_process: " + users_list.filter(user => user.uid == chatID).polling_process);
+        bot.sendMessage(chatID, "writing_message: " + users_list.filter(user => user.uid == chatID).writing_message);
         return;
     }
+    
     if (users_list.filter(user => user.uid == chatID).polling_process) {
         if (users_list.filter(user => user.uid == chatID).writing_message == true && users_list.filter(user => user.uid == chatID).adding_hashtags == false) {
             users_list.filter(user => user.uid == chatID).question_msg = `<b>📍Питання</b>\n- - - - - - - - - - - - - - -\n${msg.text}\n- - - - - - - - - - - - - - -\n`;
