@@ -116,7 +116,7 @@ bot.on("message", function (msg) {
             users_list.filter(user => String(user.uid) == chatID)[0].question_msg = users_list.filter(user => String(user.uid) == chatID)[0].question_msg + users_list.filter(user => String(user.uid) == chatID)[0].tags_array.join(" ");
             bot.sendMessage(chatID, "✈ <b>Ваше питання надіслано!</b>", greeting_keyboard);
             setTimeout(() => {
-                bot.sendMessage("-1001714220987", users_list.filter(user => String(user.uid) == chatID)[0].question_msg, {
+                bot.sendMessage("-1001714220983", users_list.filter(user => String(user.uid) == chatID)[0].question_msg, {
                     "parse_mode": "HTML",
                     disable_web_page_preview: true
                 });
